@@ -1,8 +1,9 @@
 import express, {Express} from 'express';
-import { asValue, createContainer, InjectionMode } from 'awilix';
+import { asClass, asValue, createContainer, InjectionMode } from 'awilix';
 import config from './config';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { MysqlConnection } from './database/MysqlConnection';
 dotenv.config();
 const app: Express = express();
 
@@ -12,7 +13,8 @@ const container = createContainer({
 });
 
 container.register({
-  dbConfig: asValue(config.dbConfig)
+  dbConfig: asValue(config.dbConfig),
+  dbConnection: asClass(MysqlConnection).singleton(),
 });
 
 app.use(cors());
