@@ -4,6 +4,7 @@ import config from './config';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { MysqlConnection } from './database/MysqlConnection';
+import { MysqlStudentRepository } from './repositories/MysqlStudentRepository';
 dotenv.config();
 const app: Express = express();
 
@@ -15,6 +16,7 @@ const container = createContainer({
 container.register({
   dbConfig: asValue(config.dbConfig),
   dbConnection: asClass(MysqlConnection).singleton(),
+  studentRepository: asClass(MysqlStudentRepository).scoped(),
 });
 
 app.use(cors());
