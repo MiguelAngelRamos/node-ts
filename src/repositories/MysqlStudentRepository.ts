@@ -25,19 +25,34 @@ export class MysqlStudentRepository implements IStudentRepository {
   }
   
   async findById(id: number): Promise<IStudent | null> {
+    console.log(id);
     const connection = await this.getConnection();
-
+    // const [element1]  =  [[1],[2]]
+    // element1 = [1]
+    // element1[0] = 1
     try {
-      const rows = await connection.execute<RowDataPacket[]>("SELECT * FROM students WHERE id = ?", [id]);
+      const [rows] = await connection.execute<RowDataPacket[]>("SELECT * FROM students WHERE id = ?", [id]);
       console.log(rows);
-      return rows as unknown as IStudent;
+      console.log(rows[0]);
+      return rows[0] as unknown as IStudent;
     } catch (error) {
       throw new Error("Error" +  error);
+    } finally {
+      connection.release();
     }
   }
-  create(student: IStudent): Promise<IStudent> {
-    throw new Error("Method not implemented.");
+  async create(student: IStudent): Promise<IStudent> {
+    const connection = await this.getConnection();
+    try {
+      await connection.execute("INSERT INTO students (name, age) VALUES (?,?)", [student.name, student.age]);
+      return student;
+    } catch (error) {
+      throw new Error("Error" + error);
+    } finally {
+      connection.release();
+    }
   }
+  
   update(id: number, student: IStudent): Promise<void> {
     throw new Error("Method not implemented.");
   }

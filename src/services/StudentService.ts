@@ -11,10 +11,11 @@ export class StudentService implements IStudentService {
   }
   
   getStudentById(id: number): Promise<IStudent | null> {
-    throw new Error("Method not implemented.");
+    return this.studentRepository.findById(id);
   }
+
   createStudent(student: IStudent): Promise<IStudent> {
-    throw new Error("Method not implemented.");
+    return this.studentRepository.create(student);
   }
   updateStudent(id: number, student: IStudent): Promise<void> {
     throw new Error("Method not implemented.");

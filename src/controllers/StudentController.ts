@@ -1,4 +1,4 @@
-import { GET, route } from "awilix-express";
+import { GET, POST, route } from "awilix-express";
 import { Request, Response, Router } from "express";
 import { IStudentService } from "../interfaces/IStudentService";
 
@@ -10,6 +10,8 @@ export class StudentController {
   constructor(private readonly studentService: IStudentService) {
     this.router = Router();
     this.router.get('/', this.all.bind(this));
+    this.router.get('/:id', this.getById.bind(this));
+    this.router.post('/', this.create.bind(this));
   }
 
   @GET()
@@ -32,5 +34,12 @@ export class StudentController {
       res.status(404).send("Student not found");
     }
 
+  }
+
+  @route('/')
+  @POST()
+  public async create(req: Request, res: Response) {
+    const newStudent = await this.studentService.createStudent(req.body);
+    res.json(newStudent);
   }
 }
