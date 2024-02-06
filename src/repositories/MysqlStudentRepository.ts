@@ -1,3 +1,4 @@
+import { RowDataPacket } from "mysql2";
 import { MysqlConnection } from "../database/MysqlConnection";
 import { IStudent } from "../interfaces/IStudent";
 import { IStudentRepository } from "../interfaces/IStudentRepository";
@@ -23,8 +24,16 @@ export class MysqlStudentRepository implements IStudentRepository {
     }
   }
   
-  findById(id: number): Promise<IStudent | null> {
-    throw new Error("Method not implemented.");
+  async findById(id: number): Promise<IStudent | null> {
+    const connection = await this.getConnection();
+
+    try {
+      const rows = await connection.execute<RowDataPacket[]>("SELECT * FROM students WHERE id = ?", [id]);
+      console.log(rows);
+      return rows as unknown as IStudent;
+    } catch (error) {
+      throw new Error("Error" +  error);
+    }
   }
   create(student: IStudent): Promise<IStudent> {
     throw new Error("Method not implemented.");

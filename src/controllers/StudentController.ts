@@ -17,4 +17,20 @@ export class StudentController {
     const students = await this.studentService.getAllStudents();
     res.json(students);
   }
+
+  @route('/:id')
+  @GET()
+  public async getById(req: Request, res: Response) {
+   
+    // const id: number = +req.params.id;
+    const id: number = Number(req.params.id);
+    const student = await this.studentService.getStudentById(id);
+  
+    if(student) {
+      res.json(student);
+    } else {
+      res.status(404).send("Student not found");
+    }
+
+  }
 }
