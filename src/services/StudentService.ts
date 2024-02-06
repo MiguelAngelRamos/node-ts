@@ -21,7 +21,7 @@ export class StudentService implements IStudentService {
     throw new Error("Method not implemented.");
   }
   deleteStudent(id: number): Promise<void> {
-    throw new Error("Method not implemented.");
+    return this.studentRepository.delete(id);
   }
 
 }

@@ -52,12 +52,21 @@ export class MysqlStudentRepository implements IStudentRepository {
       connection.release();
     }
   }
-  
+
   update(id: number, student: IStudent): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  delete(id: number): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async delete(id: number): Promise<void> {
+    const connection = await this.getConnection();
+    try {
+      await connection.execute("DELETE FROM students WHERE id = ?", [id]);
+    } catch (error) {
+      throw new Error("Error" + error);
+    }
+    finally {
+      connection.release();
+    }
   }
 
 }
