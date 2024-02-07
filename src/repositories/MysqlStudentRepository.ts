@@ -53,8 +53,15 @@ export class MysqlStudentRepository implements IStudentRepository {
     }
   }
 
-  update(id: number, student: IStudent): Promise<void> {
-    throw new Error("Method not implemented.");
+  async update(id: number, student: IStudent): Promise<void> {
+    const connection = await this.getConnection();
+    try {
+      await connection.execute("UPDATE students SET name = ?, age = ? WHERE id = ?", [student.name, student.age, id]);
+    } catch (error) {
+      throw new Error("Error" + error);
+    } finally {
+      connection.release();
+    }
   }
 
   async delete(id: number): Promise<void> {
